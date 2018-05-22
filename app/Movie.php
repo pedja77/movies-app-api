@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Movie extends Model
 {
-    public static function search($searchTerm) {
+    public static function search($searchTerm,$take=10) {
         if (!$searchTerm) {
-            return self::all();
+            return self::paginate($take);
         } else {
-            return self::where('title', 'LIKE', '%'.$searchTerm.'%')->get();
+            return self::where('title', 'LIKE', '%'.$searchTerm.'%')->paginate($take);
         }
         
     }
