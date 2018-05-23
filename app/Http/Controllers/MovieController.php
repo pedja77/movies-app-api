@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Movie;
+
 
 class MovieController extends Controller
 {
@@ -37,13 +40,35 @@ class MovieController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-         'title'=>'required',
-         'director'=>'required',
-         'imageUrl' => 'url',
-         'duration' => 'required | integer:min=1,max=500',
-         'releaseDate' => 'required'
-      ]);
+        // $this->validate($request,[
+        //   'title' => [
+        //     'required',
+        //      Rule::unique('movies')
+        //       ->where('releaseDate', request('releaseDate'))
+        //   ],
+        //   'director'=>'required',
+        //   'imageUrl' => 'url',
+        //   'duration' => 'required | integer:min=1,max=500',
+        //   'releaseDate' => 'required'
+        // ]);
+        $validator = Validator::make($request->all(), [
+          'title' => [
+            'required',
+             Rule::unique('movies')
+              ->where('releaseDate', request('releaseDate'))
+          ],
+          'director'=>'required',
+          'imageUrl' => 'url',
+          'duration' => 'required | integer:min=1,max=500',
+          'releaseDate' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            dd($validator);
+            return redirect('/api/movies/' . $request->id)
+                        ->withErrors($validator)
+                        ->withInput();
+        }
 
         $movie = new Movie();
         $movie->title = $request->input('title');
@@ -52,7 +77,7 @@ class MovieController extends Controller
         $movie->duration = $request->input('duration');
         $movie->releaseDate = $request->input('releaseDate');
         $movie->genre = $request->input('genre');
-        
+
         $movie->save();
         return $movie;
     }
@@ -103,7 +128,7 @@ class MovieController extends Controller
         $movie->duration = $request->input('duration');
         $movie->releaseDate = $request->input('releaseDate');
         $movie->genre = $request->input('genre');
-        
+
         $movie->save();
         return $movie;
     }
