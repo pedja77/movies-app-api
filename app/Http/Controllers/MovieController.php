@@ -70,15 +70,17 @@ class MovieController extends Controller
           ],
           'director'=>'required',
           'imageUrl' => 'url',
-          'duration' => 'required | integer:min=1,max=500',
-          'releaseDate' => 'required'
+          'duration' => 'required|integer|min:1|max:500',
+          'releaseDate' => 'required|date'
         ]);
 
         if ($validator->fails()) {
-            dd($validator);
-            return redirect('/api/movies/' . $request->id)
-                        ->withErrors($validator)
-                        ->withInput();
+            //dd($validator);
+            // return redirect('/api/movies/' . $request->id)
+            //             ->withErrors($validator)
+            //             ->withInput();
+            //abort(422);
+            return response()->json($validator->errors(), 422);
         }
 
         $movie = new Movie();
@@ -128,9 +130,17 @@ class MovieController extends Controller
          'title'=>'required',
          'director'=>'required',
          'imageUrl' => 'url',
-         'duration' => 'required | integer:min=1,max=500',
-         'releaseDate' => 'required'
+         'duration' => 'required|integer|min:1|max:500',
+         'releaseDate' => 'required|date'
       ]);
+
+      if ($validator->fails()) {
+            //dd($validator);
+            // return redirect('/api/movies/' . $request->id)
+            //             ->withErrors($validator)
+            //             ->withInput();
+            return response()->json($validator->errors(), 422);
+        }
 
         $movie = Movie::find($id);
         $movie->title = $request->input('title');
