@@ -24,11 +24,21 @@ class MovieController extends Controller
         $term = request()->input('term');
         $skip = request()->input('skip', 0);
         $take = request()->input('take', Movie::get()->count());
+        $column = request()->input('column');
+        $direction = request()->input('direction');
 
-        if ($term) {
-            return Movie::search($term, $skip, $take);
+        if ($column && $direction) {
+            if ($term) {
+                return Movie::orderBy($column, $direction)->search($term, $skip, $take);
+             } else {
+                return Movie::skip($skip)->take($take)->orderBy($column, $direction)->get();
+            }
         } else {
-            return Movie::skip($skip)->take($take)->get();
+            if ($term) {
+                return Movie::search($term, $skip, $take);
+            } else {
+                return Movie::skip($skip)->take($take)->get();
+            }
         }
 
     }
