@@ -113,7 +113,7 @@ class MovieController extends Controller
      */
     public function show($id)
     {
-        return Movie::find($id);
+        return Movie::findOrFail($id);
     }
 
     /**
