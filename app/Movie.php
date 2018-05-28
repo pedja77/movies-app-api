@@ -13,7 +13,7 @@ class Movie extends Model
         //     return self::where('title', 'LIKE', '%'.$searchTerm.'%')->paginate($take);
         // }
 
-        return self::where('title', 'LIKE', '%'.$term.'%')->skip($skip)->take($take)->get();
+        return self::where('title', 'LIKE', '%'.$term.'%')->skip($skip)->take($take);//->get();
 
     }
 }

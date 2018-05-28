@@ -29,15 +29,15 @@ class MovieController extends Controller
 
         if ($column && $direction) {
             if ($term) {
-                return Movie::orderBy($column, $direction)->search($term, $skip, $take);
+                return Movie::orderBy($column, $direction)->search($term, $skip, $take)->paginate($take);
              } else {
-                return Movie::skip($skip)->take($take)->orderBy($column, $direction)->get();
+                return Movie::skip($skip)->take($take)->orderBy($column, $direction)->paginate($take);
             }
         } else {
             if ($term) {
-                return Movie::search($term, $skip, $take);
+                return Movie::search($term, $skip, $take)->paginate($take);
             } else {
-                return Movie::skip($skip)->take($take)->get();
+                return Movie::skip($skip)->take($take)->paginate($take);
             }
         }
 
