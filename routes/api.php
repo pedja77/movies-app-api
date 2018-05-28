@@ -24,3 +24,5 @@ Route::middleware('api')->get('/movies/{id}', 'MovieController@show');
 Route::middleware('api')->post('/movies', 'MovieController@store');
 Route::middleware('api')->put('/movies/{id}', 'MovieController@update');
 Route::middleware('api')->delete('/movies/{id}', 'MovieController@destroy');
+
+Route::middleware('api')->post('/register', 'Auth\RegisterController@store');
